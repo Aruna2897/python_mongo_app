@@ -16,11 +16,17 @@ async def get_employees():
 
     Raises:
         HTTPException: 500 Internal Server Error if a database error occurs.
-    """
+    """       
     try:
+        print("Connecting to database...")
         employees = employee_collection.find()
-        documents = [employee_helper(document) for document in employees] 
-        return documents
+        documents = []
+        for document in employees:
+            documents.append(document)
+        # Use json library to encode the data
+        json_data = json.dumps(documents) 
+        print(json_data)
+        return Response(content=json_data, media_type="application/json")        
     except Exception as e:
         print(f"Error retrieving employees: {e}")
         raise HTTPException(status_code=500, detail="An error occurred while retrieving employees.")
